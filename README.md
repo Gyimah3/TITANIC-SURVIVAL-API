@@ -44,3 +44,4 @@ The test set was used to see how well the model performed on unseen data. For th
 - Some children travelled only with a nanny, therefore parch=0 for them.
 
 ## Author:
+[Gyimah Gideon](https://www.linkedin.com/in/gideon-gyimah-08268b243/) 
