@@ -77,5 +77,8 @@ To run this project, please type the command below being at the repo's root:
     </tr>
 </table>
 
+To open documentation in your browser, add "/docs" to your URL or
+    [click here](http://127.0.0.1:8000/docs)
+
 ## Author:
 [Gyimah Gideon](https://www.linkedin.com/in/gideon-gyimah-08268b243/) 
