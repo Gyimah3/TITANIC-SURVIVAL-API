@@ -43,5 +43,21 @@ The test set was used to see how well the model performed on unseen data. For th
 - Child = daughter, son, stepdaughter, stepson
 - Some children travelled only with a nanny, therefore parch=0 for them.
 
+
+# Setup
+Find the commands below to setup this project and execute it. You must install Python3 (<3.10)
+
+Windows:
+
+  python -m venv venv; venv\Scripts\activate; python -m pip install -q --upgrade pip; python -m pip install -qr requirements.txt  
+Linux & MacOs:
+
+  python3 -m venv venv; source venv/bin/activate; python -m pip install -q --upgrade pip; python -m pip install -qr requirements.txt  
+
+Execution
+To run this project, please type the command below being at the repo's root:
+
+    uvicorn src.main:app
+
 ## Author:
 [Gyimah Gideon](https://www.linkedin.com/in/gideon-gyimah-08268b243/) 
