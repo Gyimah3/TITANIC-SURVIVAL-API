@@ -62,5 +62,20 @@ To run this project, please type the command below being at the repo's root:
 
     uvicorn src.main:app
 
+## Screenshots
+
+<table>
+    <tr>
+        <th>Input Interface</th>
+        <th>Side Bar</th>
+        <th>After Prediction</th>
+    </tr>
+    <tr>
+        <td><img src="./images/screen1.png"/></td>
+        <td><img src="./images/screen2.png"/></td>
+        <td><img src="./images/screen3.png"/></td>
+    </tr>
+</table>
+
 ## Author:
 [Gyimah Gideon](https://www.linkedin.com/in/gideon-gyimah-08268b243/) 
