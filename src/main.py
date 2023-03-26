@@ -8,6 +8,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.compose import make_column_selector as selector
 from sklearn.metrics import accuracy_score
+from typing import List, Literal
 
 # Config & Setup
 ## Variables of environment
@@ -28,7 +29,7 @@ app = FastAPI(
 )
 
 ## Loading of assets
-with open(ml_comp, "rb") as f:
+with open(ml_comp_pkl, "rb") as f:
     loaded_items = pickle.load(f)
 #print("INFO:    Loaded assets:", loaded_items)
 
@@ -46,79 +47,50 @@ class ModelInput(BaseModel):
     Fare: float
     Parch: int
     TicketNumber: float
-    Embarked: str
-    Sex: str
-
-## Utils
-# def processing_FE(
-#     dataset, scaler, encoder,imputer, FE=pipeline_of_my_model
-# ):  # FE : ColumnTransfromer, Pipeline
-#     "Cleaning, Processing and Feature Engineering of the input dataset."
-#     """:dataset pandas.DataFrame"""
-
-#     # if imputer is not None:
-#     #     output_dataset = imputer.transform(dataset)
-#     # else:
-#     #     output_dataset = dataset.copy()
-
-#     # output_dataset = scaler.transform(output_dataset)
-
-#     # if encoder is not None:
-#     #     output_dataset = encoder.transform(output_dataset)
-#     if FE is not None:
-#         output_dataset = FE.fit(output_dataset)
-
-#     return output_dataset
+    Embarked: Literal["S", "C", "Q"]
+    Sex: Literal["male", "female"]
+    Title: Literal["Mr", "Mrs", "Miss", "Master", "FemaleChild", "Royalty", "Officer"]
 
 
 
 def make_prediction(
-     Pclass, Sex, Age, SibSp,Parch, Fare, Embarked, PeopleInTicket, FarePerPerson,TicketNumber
+     Pclass, Sex, Age, SibSp,Parch, Fare, Embarked,Title, PeopleInTicket, FarePerPerson,TicketNumber
     
 ):
 
-    df = pd.DataFrame(
-        [
-            [
-                PeopleInTicket,
-                Age,
-                FarePerPerson,
-                SibSp,
-                Pclass,
-                Fare,
-                Parch,
-                TicketNumber,
-                Embarked,
-                Sex,
-                
-            ]
-        ],
-        columns=num_cols + cat_cols,
+    data = {
+        "PeopleInTicket": PeopleInTicket,
+        "Age": Age,
+        "FarePerPerson": FarePerPerson,
+        "SibSp": SibSp,
+        "Pclass": Pclass,
+        "Fare": Fare,
+        "Parch": Parch,
+        "TicketNumber": TicketNumber,
+        "Embarked": Embarked,
+        "Title": Title,
+        "Sex": Sex,
+    }
+    
         
-    )
-    print(num_cols + cat_cols)
-    print( [
-                PeopleInTicket,
-                Age,
-                FarePerPerson,
-                SibSp,
-                Pclass,
-                Fare,
-                Parch,
-                TicketNumber,
-                Embarked,
-                Sex,
-                
-            ])
-        
-    X = df
-    #df[cat_cols] = df[cat_cols].astype("object")
-    output = pipeline_of_my_model.predict(X).tolist()
+    df = pd.DataFrame([data])
+    target_idx = {
+        0: "deceased",
+        1: "survived",
+    }
+
+    X= df
+    pred =pipeline_of_my_model.predict_proba(X).tolist()
+    pred_class = int(np.argmax(pred[0]))
+    output = {
+        "predicted_class": pred_class,
+        "prediction_explanation": target_idx[pred_class],
+        "confidence_probability": float(pred[0][pred_class]),
+    }
+
     return output
-   
-   
-
-
+    
+  
 ## Endpoints
 @app.post("/Titanic")
 async def predict(input: ModelInput):
@@ -133,16 +105,13 @@ async def predict(input: ModelInput):
         Pclass =input.Pclass,
         Fare =input.Fare,
         Parch =input.Parch,
-        TicketNumber =input.TicketNumber,
+        TicketNumber=input.TicketNumber,
+        Title = input.Title,
         Embarked =input.Embarked,
         Sex=input.Sex,
     )
-     # Labelling Model output
-    if output_pred == 0:
-        output_pred = "No,the person didn't survive"
-    else:
-        output_pred = "Yes,the person survived"
-    #return output_pred
+
+    
     return {
         "prediction": output_pred,
         "input": input
