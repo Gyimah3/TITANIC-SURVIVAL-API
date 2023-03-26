@@ -66,9 +66,9 @@ To run this project, please type the command below being at the repo's root:
 
 <table>
     <tr>
-        <th>Input Interface</th>
-        <th>Side Bar</th>
-        <th>After Prediction</th>
+        <th>Below is the executed Output</th>
+        <th>View of the API documentations in your browser</th>
+        <th>Prediction</th>
     </tr>
     <tr>
         <td><img src="./images/screen1.png"/></td>
